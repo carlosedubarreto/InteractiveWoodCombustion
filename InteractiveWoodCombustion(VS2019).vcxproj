@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\GLError.cpp" />
+    <ClCompile Include="src\GLProgram.cpp" />
+    <ClCompile Include="src\GLShader.cpp" />
+    <ClCompile Include="src\LightSource.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\physics\physics.cpp" />
+    <ClCompile Include="src\physics\physics_render.cpp" />
+    <ClCompile Include="src\physics\R3grid.cpp" />
+    <ClCompile Include="src\Tree.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\cuda_common\errors.h" />
+    <ClInclude Include="src\cuda_common\finitediff.cuh" />
+    <ClInclude Include="src\cuda_common\tex_anim2d.cuh" />
+    <ClInclude Include="src\Exception.h" />
+    <ClInclude Include="src\GLError.h" />
+    <ClInclude Include="src\GLProgram.h" />
+    <ClInclude Include="src\GLShader.h" />
+    <ClInclude Include="src\LightSource.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\physics\advection.cuh" />
+    <ClInclude Include="src\physics\dev_R3grid.cuh" />
+    <ClInclude Include="src\physics\heat_3d.cuh" />
+    <ClInclude Include="src\physics\physics.h" />
+    <ClInclude Include="src\physics\pressure.cuh" />
+    <ClInclude Include="src\physics\R3grid.h" />
+    <ClInclude Include="src\physics\smoke_render.cuh" />
+    <ClInclude Include="src\physics\vec3.cuh" />
+    <ClInclude Include="src\Tree.h" />
+    <ClInclude Include="src\TreeGraph.h" />
+    <ClInclude Include="src\Triangle.h" />
+    <ClInclude Include="src\Vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\cuda_common\finitediff.cu" />
+    <CudaCompile Include="src\cuda_common\tex_anim2d.cu" />
+    <CudaCompile Include="src\physics\advection.cu" />
+    <CudaCompile Include="src\physics\dev_R3grid.cu" />
+    <CudaCompile Include="src\physics\heat_3d.cu" />
+    <CudaCompile Include="src\physics\pressure.cu" />
+    <CudaCompile Include="src\physics\smoke_render.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\shader.frag" />
+    <None Include="src\shaders\shader.vert" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B11D8D8A-1AE6-4AB1-A021-4D6C58858CDA}</ProjectGuid>
+    <RootNamespace>InteractiveWoodCombustion_VS2019_</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.1.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\src\vcpkg\installed\x64-windows\bin;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.1\common\inc;D:\CPP\0_Headers\glm;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;freeglut.lib;cublas.lib;cusparse.lib;cudart.lib;glew64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1\lib\x64;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.1\common\lib\x64;C:\src\vcpkg\installed\x64-windows\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CudaCompile>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.1.targets" />
+  </ImportGroup>
+</Project>
