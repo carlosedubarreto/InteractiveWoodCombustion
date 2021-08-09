@@ -18,7 +18,8 @@
 // --------------------------------------------------------------------------
 
 #pragma once
-
+#define uint unsigned int //teste
+//#define GLM_FORCE_CUDA //testei m,as acho que nao funcionou
 #include "Vec3.h"
 #include <glm/glm.hpp>
 

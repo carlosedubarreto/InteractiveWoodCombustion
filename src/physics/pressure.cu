@@ -1,5 +1,6 @@
 #include "pressure.cuh"
 
+
 __device__ int valIndex(int k_x, int k_y, int k_z){
     const int center_nnz = 7;
     const int boundary_nnz = 1;
@@ -53,6 +54,9 @@ __device__ int valIndex(int k_x, int k_y, int k_z){
 }
 
 __global__ void prepareSystem(const int NFLAT, float3* d_vel, float* d_b, float* d_val, int* d_cind, int * d_rptr) {
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
+    const float P_ATM = 0.0f;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -110,6 +114,8 @@ __global__ void prepareSystem(const int NFLAT, float3* d_vel, float* d_b, float*
 }
 
 __global__ void prepareJacobiMethod(float3* d_vel, float* d_f) {
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -126,6 +132,8 @@ __global__ void prepareJacobiMethod(float3* d_vel, float* d_f) {
 }
 
 __global__ void jacobiIterations(float * d_pressure, float * d_temppressure, float * d_f) {
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -165,6 +173,8 @@ __global__ void resetPressure(float* d_pressure){
     d_pressure[k] = 0;
 }
 __global__ void substractPressureGradient(float3 * d_vel, float* d_pressure){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;

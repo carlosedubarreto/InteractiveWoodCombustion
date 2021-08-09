@@ -9,8 +9,8 @@
 // All rights reserved.                                                       
 // --------------------------------------------------------------------------
 #pragma once
-
 #include <GL/glew.h>
+
 #include <string>
 
 class GLShader {

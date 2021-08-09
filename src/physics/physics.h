@@ -1,12 +1,14 @@
 #ifndef __PHYSICS_H__
 #define __PHYSICS_H__
+#define uint unsigned int
+#include <GL/glew.h>//teste
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
 #include <math.h>
  
 
-//#include <GL/glut.h>
+
 #include "../cuda_common/errors.h"
 #include "../cuda_common/tex_anim2d.cuh"
 

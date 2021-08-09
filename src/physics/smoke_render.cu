@@ -12,6 +12,8 @@ __host__ __device__ float posclip(float a){
 }
 __host__ __device__ bool rayGridIntersect(const vec3 ray_orig, const vec3 ray_dir, 
                                  int3 * voxel, float * t){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const float m = 0., M = GRID_SIZE;
     float tmin = (m - ray_orig.x()) / ray_dir.x();
     float tmax = (M - ray_orig.x()) / ray_dir.x();
@@ -43,6 +45,11 @@ __host__ __device__ bool rayGridIntersect(const vec3 ray_orig, const vec3 ray_di
 }
 
 __global__ void smokeLightKernel(vec3 ray_o, vec3 ray_dir, float * d_smoke, float * voxelRadiance){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
+    const float SMOKE_ALBEDO = 0.7;
+    const float SMOKE_LIGHT_RADIANCE = 5e0;
+    const float SMOKE_EXTINCTION_COEFF = 15e1;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     if(k_x >= SMOKE_RAY_SQRT_COUNT || k_y >= SMOKE_RAY_SQRT_COUNT) return;
@@ -105,6 +112,9 @@ __global__ void resetSmokeRadiance(float * voxelRadiance){
     voxelRadiance[k] = 0.f;
 }
 __global__ void generateSmokeColorBuffer( uchar4* dev_out, const float* d_smoke, float* d_smokeRadiance) {
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
+    const float SMOKE_EXTINCTION_COEFF = 15e1;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;

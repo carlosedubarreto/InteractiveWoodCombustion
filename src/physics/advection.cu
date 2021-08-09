@@ -1,5 +1,4 @@
 #include "advection.cuh"
-
 __device__ float min8f(float a, float b, float c, float d, float e, float f, float g, float h){
     return fminf(fminf(fminf(a,b), fminf(c,d)),fminf(fminf(e,f),fminf(g,h)));
 }
@@ -36,6 +35,8 @@ __device__ float3 clampf3(float3 x, float3 m, float3 M){
 // Advect phi along vel
 // Vector 3D MacCormack modified Advection Scheme used to advect velocity
 __global__ void macCormackAdvection(float3 * phi, float3 * oldphi, float3 * vel, float3 * predicted){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -98,6 +99,8 @@ void advect(float3 * phi, float3 * oldphi, float3 * vel){
 
 // Scalar 3D macCormack modified Advection Scheme
 __global__ void macCormackAdvection(float * phi, float * oldphi, float3 * vel, float * predicted, float boundary){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;

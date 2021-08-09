@@ -6,7 +6,8 @@
  #include "finitediff.cuh"
  #include "errors.h"
  
- __constant__ float3 dev_cnus[4]; // i = x,y; j = 1,2,3,4
+//extern __constant__ float3 dev_cnus[4]; // i = x,y; j = 1,2,3,4
+__constant__ float3 dev_cnus[4]; // i = x,y; j = 1,2,3,4
  
  void set1DerivativeParameters(const float hd_i[3] )
  {
@@ -128,6 +129,7 @@
  // LAPLACIAN (LAP) in 1,2,3,4 stencils, central difference
  
  __device__ float dev_lap1( float centerval, float3 stencil[1][2]  ) {
+	 extern __constant__ float3 dev_cnus[4]; //teste
 	 float stencilx[1][2] { { stencil[0][0].x, stencil[0][1].x } };
 	 float stencily[1][2] { { stencil[0][0].y, stencil[0][1].y } };
 	 float stencilz[1][2] { { stencil[0][0].z, stencil[0][1].z } };
@@ -144,6 +146,7 @@
  }
  
  __device__ float dev_lap2(float centerval, float3 stencil[2][2]  ) {
+	 extern __constant__ float3 dev_cnus[4]; //teste
 	 float stencilx[2][2] { { stencil[0][0].x, stencil[0][1].x }, { stencil[1][0].x, stencil[1][1].x } };
 	 float stencily[2][2] { { stencil[0][0].y, stencil[0][1].y }, { stencil[1][0].y, stencil[1][1].y } };
 	 float stencilz[2][2] { { stencil[0][0].z, stencil[0][1].z }, { stencil[1][0].z, stencil[1][1].z } };
@@ -160,6 +163,7 @@
  }
  
  __device__ float dev_lap3( float centerval, float3 stencil[3][2]  ) {
+	 extern __constant__ float3 dev_cnus[4]; //teste
 	 float stencilx[3][2] { { stencil[0][0].x, stencil[0][1].x }, { stencil[1][0].x, stencil[1][1].x }, { stencil[2][0].x, stencil[2][1].x } };
 	 float stencily[3][2] { { stencil[0][0].y, stencil[0][1].y }, { stencil[1][0].y, stencil[1][1].y }, { stencil[2][0].y, stencil[2][1].y } };
 	 float stencilz[3][2] { { stencil[0][0].z, stencil[0][1].z }, { stencil[1][0].z, stencil[1][1].z }, { stencil[2][0].z, stencil[2][1].z } };
@@ -176,6 +180,7 @@
  }
  
  __device__ float dev_lap4( float centerval, float3 stencil[4][2]  ) {
+	 extern __constant__ float3 dev_cnus[4]; //teste
 	 float stencilx[4][2] { { stencil[0][0].x, stencil[0][1].x }, { stencil[1][0].x, stencil[1][1].x }, { stencil[2][0].x, stencil[2][1].x }, { stencil[3][0].x, stencil[3][1].x } };
 	 float stencily[4][2] { { stencil[0][0].y, stencil[0][1].y }, { stencil[1][0].y, stencil[1][1].y }, { stencil[2][0].y, stencil[2][1].y }, { stencil[3][0].y, stencil[3][1].y } };
 	 float stencilz[4][2] { { stencil[0][0].z, stencil[0][1].z }, { stencil[1][0].z, stencil[1][1].z }, { stencil[2][0].z, stencil[2][1].z }, { stencil[3][0].z, stencil[3][1].z } };

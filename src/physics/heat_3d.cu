@@ -55,6 +55,7 @@ __device__ int d_abs(int a) {
     return a > 0 ? a : -a;
 }
 __global__ void resetKernelCentered(float* d_temp, float*  d_oldtemp, float*  d_smokedensity,float*  d_oldsmokedensity) {
+    const float T_AMBIANT = 20.0f;
     const int k_x = blockIdx.x*blockDim.x + threadIdx.x;
     const int k_y = blockIdx.y*blockDim.y + threadIdx.y;
     const int k_z = blockIdx.z*blockDim.z + threadIdx.z;
@@ -83,6 +84,8 @@ __global__ void resetKernelVelocity(float3 *  d_vel,float3 *  d_oldvel) {
 
 
 __device__ float3 getAlpham (float3 * d_vel, float3 pos, int k){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     // Iteratively compute alpha_m
     float3 alpha_m = d_vel[k] * dev_Deltat[0];
     for(uint i = 0; i < SEMILAGRANGIAN_ITERS; i++){
@@ -109,6 +112,9 @@ __device__ float3 getAlpham (float3 * d_vel, float3 pos, int k){
     return alpha_m;
 }
 __device__ float3 fbuoyancy(float * d_smoke, float* d_temp, int k_x, int k_y, int k_z){
+    const float T_AMBIANT = 20.0f;
+    const float BUOY_ALPHA = 0.3; // SMOKE DENSITY
+    const float BUOY_BETA = 0.1; // TEMPERATURE
     const int k = flatten(k_x, k_y, k_z);
     float3 f = make_float3(0,0,0);
     if(k_y == GRID_COUNT - 1){
@@ -122,6 +128,9 @@ __device__ float3 fbuoyancy(float * d_smoke, float* d_temp, int k_x, int k_y, in
     return f;
 }
 __device__ float3 fconfinement(float3 * d_vorticity, int k_x, int k_y, int k_z){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
+    const float VORTICITY_EPSILON = 1;
     const int k = flatten(k_x, k_y, k_z);
     if(k_x == GRID_COUNT -1 || k_y == GRID_COUNT -1 || k_z == GRID_COUNT -1)
         return make_float3(0,0,0);
@@ -134,6 +143,8 @@ __device__ float3 fconfinement(float3 * d_vorticity, int k_x, int k_y, int k_z){
     return f.toFloat3();
 }
 __global__ void computeVorticity(float3 *d_vorticity, float3* d_vel, float3* d_ccvel){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -159,6 +170,7 @@ __global__ void computeVorticity(float3 *d_vorticity, float3* d_vel, float3* d_c
 }
 #include <stdio.h>
 __global__ void sourcesKernel(float* d_smokedensity, float* d_temp){
+    const float T_AMBIANT = 20.0f;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -173,6 +185,8 @@ __global__ void sourcesKernel(float* d_smokedensity, float* d_temp){
 }
 
 __global__ void velocityKernel(float *d_temp, float3* d_vel, float3* d_oldvel, float3* d_alpha_m, float* d_smokedensity, float3* d_vorticity, float3 externalForce){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -228,6 +242,8 @@ __global__ void velocityKernel(float *d_temp, float3* d_vel, float3* d_oldvel, f
     //d_vel[k] = d_oldvel[k] + dv + f * dev_Deltat[0];        
 }
 __device__ float scalarLinearInt(float* scalarField, float3 pos, float oobvalue){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     // Trilinear interpolation
     int x = static_cast<int> (pos.x / BLOCK_SIZE);
     int y = static_cast<int> (pos.y / BLOCK_SIZE);
@@ -255,6 +271,8 @@ __device__ float scalarLinearInt(float* scalarField, float3 pos, float oobvalue)
     return (1-tz) * bz + tz * uz;
 }
 __global__ void smokeAdvectionKernel(float *d_temp, float3* d_vel, float3* d_alpha_m,float* d_smoke, float* d_oldsmoke){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;
@@ -289,6 +307,8 @@ __global__ void smokeAdvectionKernel(float *d_temp, float3* d_vel, float3* d_alp
 
 }
 __device__ float laplacian(float* field, float oobvalue, int k_x, int k_y, int k_z) {
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
     float out = 0;
     out += -6 * field[flatten(k_x,k_y,k_z)];
     out += k_x < GRID_COUNT -1 ? field[flatten(k_x+1,k_y,k_z)] : oobvalue;
@@ -301,6 +321,11 @@ __device__ float laplacian(float* field, float oobvalue, int k_x, int k_y, int k
     return out;
 }
 __global__ void tempAdvectionKernel(float *d_temp, float * d_oldtemp, float3* d_vel,float3* d_alpha_m, float* lap){
+    const float GRID_SIZE = 1;
+    const float BLOCK_SIZE = GRID_SIZE / GRID_COUNT;
+    const float T_AMBIANT = 20.0f;
+    const float TEMPERATURE_ALPHA = 8e-5;//8e-5;
+    const float TEMPERATURE_GAMMA = -4e-7;//8e-7;
     const int k_x = threadIdx.x + blockDim.x * blockIdx.x;
     const int k_y = threadIdx.y + blockDim.y * blockIdx.y;
     const int k_z = threadIdx.z + blockDim.z * blockIdx.z;

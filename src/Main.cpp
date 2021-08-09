@@ -11,6 +11,9 @@
 
 #include <GL/glew.h>
 #include <GL/glut.h>
+
+//#include <GL/gl.h>//teste
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -23,7 +26,7 @@
 #include <cuda_gl_interop.h>
 
 #include <helper_cuda.h>
-#include <helper_cuda_gl.h>
+//#include <helper_cuda_gl.h>
 
 #include "Vec3.h"
 #include "Camera.h"
@@ -118,7 +121,7 @@ void init () {
     colorResponses.resize (tree.positions ().size ());
     camera.resize (DEFAULT_SCREENWIDTH, DEFAULT_SCREENHEIGHT);
     try {
-        glProgram = GLProgram::genVFProgram ("Simple GL Program", "src/shaders/shader.vert", "src/shaders/shader.frag"); // Load and compile pair of shaders
+        glProgram = GLProgram::genVFProgram ("Simple GL Program", "D:/CPP/int_wood v3 (CUDA)/x64/Debug/src/shaders/shader.vert", "D:/CPP/int_wood v3 (CUDA)/x64/Debug/src/shaders/shader.frag"); // Load and compile pair of shaders
 
     } catch (Exception & e) {
         cerr << e.msg () << endl;
@@ -368,12 +371,15 @@ int main (int argc, char ** argv) {
     glutInitDisplayMode (GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize (DEFAULT_SCREENWIDTH, DEFAULT_SCREENHEIGHT);
     window = glutCreateWindow (appTitle.c_str ());
-    int devID = findCudaGLDevice(argc,  (const char **) argv);
-    cudaDeviceProp deviceProps;
-    HANDLE_ERROR(cudaGetDeviceProperties(&deviceProps, devID));
-    init ();
-    printf("\nCUDA device [%s] has %d Multi-Processors\n",
-           deviceProps.name, deviceProps.multiProcessorCount);
+    //int devID = findCudaGLDevice(argc,  (const char **) argv);
+    int devID = 0;
+    /*if (cudaGetDeviceCount(&devID) == cudaSuccess) {*/
+        cudaDeviceProp deviceProps;
+        HANDLE_ERROR(cudaGetDeviceProperties(&deviceProps, devID));
+        init();
+        printf("\nCUDA device [%s] has %d Multi-Processors\n",
+            deviceProps.name, deviceProps.multiProcessorCount);
+    //}
     glutIdleFunc (idle);
     glutReshapeFunc (reshape);
     glutDisplayFunc (display);

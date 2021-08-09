@@ -9,7 +9,9 @@
 #include "errors.h"
 
 // I fixed the size of dev_c to be 4 because I don't anticipate that we'd need more accuracy 
-extern __constant__ float3 dev_cnus[4]; // i = x,y,z; j = 1,2,3,4
+//__constant__ float3 dev_cnus[4]; // i = x,y,z; j = 1,2,3,4
+extern float3 dev_cnus[4]; // i = x,y,z; j = 1,2,3,4 // teste
+//__global__ float3 dev_cnus[4]; // i = x,y,z; j = 1,2,3,4 //teste
 
 void set1DerivativeParameters(const float hd_i[3] );
 

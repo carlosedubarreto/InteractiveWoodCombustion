@@ -5,13 +5,17 @@
  */
 #ifndef __TEX_ANIM2D_H__
 #define __TEX_ANIM2D_H__
-
+//#include <GL/glew.h>//teste
+//#include <GL/glu.h>//teste
 #include "../physics/heat_3d.cuh"  // BC
 #include "../physics/physics.h" 
 #include <stdio.h>
 
 #include <cuda_gl_interop.h>
 #undef APIENTRY // Removes redefinition warning
+
+
+
 #include <GL/glut.h>
 
 #include <cuda_runtime.h>

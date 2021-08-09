@@ -19,11 +19,11 @@
 // for more details.                                                          
 //                                                                          
 // --------------------------------------------------------------------------
-
-#include "Camera.h"
-#include <GL/glew.h>
+#define uint unsigned int//teste
+//#include <GL/glew.h>
 #include <GL/glut.h>
-#include <GL/glu.h>
+//#include <GL/glu.h>
+#include "Camera.h"
 #include <iostream>
 #include <string>
 

@@ -1,5 +1,11 @@
+#define uint unsigned int //teste
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+//#include <GL/glew.h>//teste
+//#include <GL/glut.h>//teste
+//#include <GL/glu.h>//teste
 
 #include "physics.h"
 #include <iostream>
@@ -10,6 +16,7 @@ inline int flatten(int col, int row, int z) {
 }
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 
 void Physics::initSmokeQuads(){
     int nflat = grid3d->NFLAT();

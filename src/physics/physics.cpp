@@ -1,4 +1,7 @@
 #include "physics.h"
+//#include <GL/glew.h>//teste
+//#include <GL/glut.h>//teste
+//#include <GL/glu.h>//teste
 extern GPUAnim2dTex* testGPUAnim2dTex;
 
 Physics::Physics(){  
